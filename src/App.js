@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import KanbanBoard from './KanbanBoard';
+import Home from './Home';
+import Users from './users';
+import Dashboard from './Dashboard';
+import ContactForm from './ContactForm';
+import './kanban.css';
+//import Sidebar from './Sidebar';
+import Sidebar from './components/Sidebar';
 function App() {
+  //const projectName = 'CodeForce';
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="container">
+        <Sidebar />
+        <div className="content">
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/kanban" component={KanbanBoard} />
+            <Route path="/users" component={Users} />
+            <Route path="/Dashboard" component={Dashboard} />
+            <Route path="/contact" component={ContactForm} />
+          </Switch>
+        </div>
+      </div>
+    </Router>
   );
 }
 
