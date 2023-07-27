@@ -7,11 +7,29 @@ function Dashboard() {
 
   const [projectCount, setProjectCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
+  const [utiCount, setUtiCount] = useState(0);
+
+  useEffect(() => {
+    // Effectuez ici votre requête pour compter le nombre d'insertions dans ProjectHac__c
+    fetch('https://our-dev-ed.develop.my.salesforce.com/services/data/v51.0/query?q=SELECT COUNT() FROM User', {
+      headers: {
+        Authorization: 'Bearer 00D8e000000SiXZ!ARkAQEvqk4.wDcdQ86561346Ts4mT_4CyblmoJBuhHXGMVBw78z_MICrQNBwQxCDxVTPmCvPj_CgnyCTLO9c0TgkcOA_wgvG', // Remplacez YOUR_ACCESS_TOKEN par votre jeton d'accès Salesforce valide
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        const count = data.totalSize; // Obtenez le nombre total d'insertions
+        setUtiCount(count); // Met à jour le nombre de projets
+      })
+      .catch(error => {
+        console.error('Erreur lors de la récupération du nombre de projets :', error);
+      });
+  }, []);
   useEffect(() => {
     // Effectuez ici votre requête pour compter le nombre d'insertions dans ProjectHac__c
     fetch('https://our-dev-ed.develop.my.salesforce.com/services/data/v51.0/query?q=SELECT COUNT() FROM ProjectHac__c', {
       headers: {
-        Authorization: 'Bearer 00D8e000000SiXZ!ARkAQIBhpwfkIcT98KscqzQvdTBtMnwLojnnTKoKdgS8RDs94q_IF0O0Jf3IdKn6OTIpO8oVrM.e2FCKlDoSV1Z45XwteRS7', // Remplacez YOUR_ACCESS_TOKEN par votre jeton d'accès Salesforce valide
+        Authorization: 'Bearer 00D8e000000SiXZ!ARkAQEvqk4.wDcdQ86561346Ts4mT_4CyblmoJBuhHXGMVBw78z_MICrQNBwQxCDxVTPmCvPj_CgnyCTLO9c0TgkcOA_wgvG', // Remplacez YOUR_ACCESS_TOKEN par votre jeton d'accès Salesforce valide
       },
     })
       .then(response => response.json())
@@ -27,7 +45,7 @@ function Dashboard() {
     // Effectuez ici votre requête pour compter le nombre d'insertions dans ProjectHac__c
     fetch('https://our-dev-ed.develop.my.salesforce.com/services/data/v51.0/query?q=SELECT COUNT() FROM User_Story__c', {
       headers: {
-        Authorization: 'Bearer 00D8e000000SiXZ!ARkAQIBhpwfkIcT98KscqzQvdTBtMnwLojnnTKoKdgS8RDs94q_IF0O0Jf3IdKn6OTIpO8oVrM.e2FCKlDoSV1Z45XwteRS7', // Remplacez YOUR_ACCESS_TOKEN par votre jeton d'accès Salesforce valide
+        Authorization: 'Bearer 00D8e000000SiXZ!ARkAQEvqk4.wDcdQ86561346Ts4mT_4CyblmoJBuhHXGMVBw78z_MICrQNBwQxCDxVTPmCvPj_CgnyCTLO9c0TgkcOA_wgvG', // Remplacez YOUR_ACCESS_TOKEN par votre jeton d'accès Salesforce valide
       },
     })
       .then(response => response.json())
@@ -69,7 +87,7 @@ function Dashboard() {
         </div>
         <div className="col-div-3">
           <div className="box">
-            <p>99<br /><span>Orders</span></p>
+            <p>{utiCount}<br /><span>Users</span></p>
             <i className="fa fa-shopping-bag box-icon"></i>
           </div>
         </div>

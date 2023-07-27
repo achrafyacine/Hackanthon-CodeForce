@@ -55,6 +55,7 @@ function KanbanBoard() {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
+      <h1>{localStorage.getItem("name_project")}</h1>
       <div className="kanban-board">
         {columns.map((column, index) => (
           <Column key={column.id} title={column.title} status={column.status} items={items} setItems={setItems} />

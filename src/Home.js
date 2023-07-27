@@ -3,20 +3,24 @@ import axios from 'axios';
 //import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import Column from './Column';
 
 
 import './addproject.css';  
 function Home() {
   const [data, setData] = useState([]);
   const [newName, setNewName] = useState('');
+  const [selectedProjectName, setSelectedProjectName] = useState('');
   //const navigate = useHistory();
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleNavigate = (id) => {
+  const handleNavigate = (id, name) => {
     localStorage.setItem('id_project', id);
+    localStorage.setItem('name_project', name);
+    setSelectedProjectName(name);
     window.location.href = '/kanban';
   };
 
@@ -70,17 +74,17 @@ function Home() {
   };
 
   return (
-    <div className="page-container" style={{ overflowY: 'scroll', height: '100vh' }}>
-      <main className="grid">
-        <div className="custom-form-container">
-          <form className="custom-form" onSubmit={handleNewNameSubmit}>
+    <div className="" style={{ overflowY: 'scroll', height: '100vh' }}>
+      <main className="">
+        <div className="">
+          <form className="" onSubmit={handleNewNameSubmit} style={{paddingTop:'30px'}}>
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              placeholder="Enter a new name"
+              placeholder="Entrer un nom"
             />
-            <button type="submit">Add Project</button>
+            <button type="submit">Ajouter</button>
           </form>
         </div>
 
@@ -97,17 +101,17 @@ function Home() {
             <div
               className="cardsgrid"
               key={item.Name}
-              onClick={() => handleNavigate(item.Id)}
+              onClick={() => handleNavigate(item.Id,item.Name)}
             >
               <img
                 src={`https://img.freepik.com/free-vector/project-management-design-concept-symbolizing-analysis-solving-problems-isometric-vector-illustration_1284-77122.jpg`} // Replace with your image URL or file path
                 alt="Project"
                 className="cardimg"
               />
-              <h3>{item.Name}</h3>
-              <div>
+              <h3>{item.Name}</h3><br></br>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <FontAwesomeIcon icon={faAngleDoubleRight} style={{ width: '11px' }} />
-                <p>View kanban</p>
+                <p style={{ marginLeft: '5px' }}>Voir kanban</p>
               </div>
             </div>
           ))}

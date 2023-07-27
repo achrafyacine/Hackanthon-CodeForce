@@ -1,5 +1,7 @@
 import React from 'react';
-//import './contact.css';
+import './contactform.css';
+//import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+
 const ContactForm = () => {
   const [formStatus, setFormStatus] = React.useState('Send')
   const onSubmit = (e) => {
@@ -14,31 +16,25 @@ const ContactForm = () => {
     console.log(conFom)
   }
   return (
-    <div className="container mt-5">
-      <h2 className="mb-3">React Contact Form Component Example</h2>
-      <form onSubmit={onSubmit}>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="name">
-            Name
-          </label>
-          <input className="form-control" type="text" id="name" required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="email">
-            Email
-          </label>
-          <input className="form-control" type="email" id="email" required />
-        </div>
-        <div className="mb-3">
-          <label className="form-label" htmlFor="message">
-            Message
-          </label>
-          <textarea className="form-control" id="message" required />
-        </div>
-        <button className="btn btn-danger" type="submit">
-          {formStatus}
-        </button>
-      </form>
+
+    <div className = "form-box">
+      
+        <h5 className = "form-step"> Envoyer une demande </h5>
+        <form className="borderstyle">
+            
+            <div className = "field1">
+            <medium>  </medium>
+            <br/>
+            <br/>
+            <input placeholder="Name"/>        
+            <input placeholder="Phone"/>
+            <input placeholder="E-mail"/>
+            <textarea placeholder="Description"/>
+            </div>
+
+            <button class="button-17" role="button"> Envoyer</button>
+        </form>
+
     </div>
   )
 }

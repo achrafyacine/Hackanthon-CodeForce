@@ -7,19 +7,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import './column.css';  
 
-function Column({ title, status, items, setItems }) {
+function Column({ title, status, items, setItems, selectedProjectName, setSelectedProjectName }) {
   const columnItems = items.filter((item) => item.statut__c === status);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalIsOpen1, setModalIsOpen1] = useState(false);
 
   //const [modalData, setModalData] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItemName, setSelectedItemName] = useState('');
+  const [selectedItemDescription, setSelectedItemDescription] = useState('');
+  const [selectedItemStatut, setSelectedItemStatut] = useState('');
+  const [selectedItemDate, setSelectedItemDate] = useState('');
+  const [selectedItemTitle, setSelectedItemTitle] = useState('');
+  const [selectedItemId, setSelectedItemId] = useState('');
+
 
   const [formData, setFormData] = useState({
     Name: 'A',
     title__c: '',
     description__c: '',
     statut__c: '',
+    date__c: '',
     id_projet__c: localStorage.getItem("id_project")
   });
 
@@ -71,6 +79,14 @@ function Column({ title, status, items, setItems }) {
   const openModal = (data) => {
     setSelectedItem(data);
     setModalIsOpen(true);
+    setSelectedItemId(data.Id)
+    setSelectedItemDate(data.date__c)
+    setSelectedItemDescription(data.description__c)
+    setSelectedItemTitle(data.title__c)
+    setSelectedItemStatut(data.statut__c)
+    setSelectedItemName(data.Name)
+    console.log('data.Id')
+    console.log(data.Id)
   };
 
   const closeModal = () => {
@@ -88,16 +104,39 @@ function Column({ title, status, items, setItems }) {
     setModalIsOpen1(false);
   };
 
+  const updateUserStory= async ()=>{
+    try{
+      const response = await axios.patch('https://our-dev-ed.develop.my.salesforce.com/services/data/v51.0/sobjects/User_Story__c/'+selectedItemId,
+      {
+        title__c:selectedItemTitle,
+        description__c:selectedItemDescription,
+        statut__c:selectedItemStatut,
+        date__c:selectedItemDate
+      }, {
+        headers :{
+          Authorization : 'Bearer 00D8e000000SiXZ!ARkAQEvqk4.wDcdQ86561346Ts4mT_4CyblmoJBuhHXGMVBw78z_MICrQNBwQxCDxVTPmCvPj_CgnyCTLO9c0TgkcOA_wgvG'
+        }
+      });
+      console.log(response.data)
+
+    }catch(error){
+      console.log('error')
+      console.log(error)
+    }
+  }
+
   return (
     <div className="column">
       <h2 className="column-title">{title}</h2>
+      {selectedProjectName === title && <p>{selectedProjectName}</p>}
       <Droppable droppableId={status}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
             {columnItems.map((item, index) => (
-              <Draggable key={item.attributes.url} draggableId={item.attributes.url} index={index}>
+              <Draggable key={item.attributes.url} draggableId={item.attributes.url} index={index} >
                 {(provided) => (
                   <div
+                  
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
@@ -106,8 +145,8 @@ function Column({ title, status, items, setItems }) {
                   >
                     <div className="item-content">
                     <div className="title-container">
-                      <h3>{item.title__c}</h3>
-                      <FontAwesomeIcon icon={faTrash} onClick={() => handleDeleteItem(item.Id)} className="delete-icon" /></div>
+                      <h3>{item.title__c} {item.Name} {item.Id}</h3>
+                      </div>
                       <FontAwesomeIcon icon={faAlignLeft} className="align-icon" />
                   </div>
                   </div>
@@ -138,22 +177,19 @@ function Column({ title, status, items, setItems }) {
       
       <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Example Modal" className="custom-modal1">
         {selectedItem && (
-    <table class="styled-table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{selectedItem.title__c}</td>
-            <td>{selectedItem.description__c}</td>
-            <td>{selectedItem.date__c}</td>
-        </tr>
-    </tbody>
-</table>
+          <div>
+            <label>Title</label>
+            <input type='text' value={selectedItemTitle} onChange={e => setSelectedItemTitle(e.target.value)}/><br/>
+            <label>Name</label>
+            <input type='text' value={selectedItemName} onChange={e => setSelectedItemName(e.target.value)}/><br/>
+            <label>Description</label>
+            <input type='text' value={selectedItemDescription} onChange={e => setSelectedItemDescription(e.target.value)}/><br/>
+            <label>Statut</label>
+            <input type='text' value={selectedItemStatut} onChange={e => setSelectedItemStatut(e.target.value)}/><br/>
+            <label>Date</label>
+            <input type='date' value={selectedItemDate} onChange={e => setSelectedItemDate(e.target.value)}/><br/>
+            <button onClick={updateUserStory}>Modifier</button>
+          </div>
         )}
       </Modal>
       <Modal isOpen={modalIsOpen1} onRequestClose={closeModal1} contentLabel="Example Modal" className="custom-modal"
@@ -161,6 +197,7 @@ function Column({ title, status, items, setItems }) {
   shouldCloseOnOverlayClick={false}>
         <form onSubmit={handleSubmitUserStory}>
           <label>
+            <br/>
             <b>Name:</b>
             <input type="text" name="Name" value={formData.Name} onChange={handleChange} className='input-field' />
           </label>
@@ -179,6 +216,12 @@ function Column({ title, status, items, setItems }) {
               className='input-field'
             />
           </label>
+          <label>
+            <b>Title:</b>
+            <input type="date" name="date__c" value={formData.date__c} onChange={handleChange} className='input-field' />
+          </label>
+          <br />
+          <label></label>
           <br />
           <label>
             <b>Statut :</b>

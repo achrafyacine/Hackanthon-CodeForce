@@ -19,7 +19,7 @@ const Users = () => {
         const response = await axios.get(url, {
           headers: {
             Authorization:
-              'Bearer 00D8e000000SiXZ!ARkAQIBhpwfkIcT98KscqzQvdTBtMnwLojnnTKoKdgS8RDs94q_IF0O0Jf3IdKn6OTIpO8oVrM.e2FCKlDoSV1Z45XwteRS7',
+              'Bearer 00D8e000000SiXZ!ARkAQEvqk4.wDcdQ86561346Ts4mT_4CyblmoJBuhHXGMVBw78z_MICrQNBwQxCDxVTPmCvPj_CgnyCTLO9c0TgkcOA_wgvG',
           },
         });
 
